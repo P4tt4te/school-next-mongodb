@@ -1,4 +1,4 @@
-import clientPromise from "@/lib/mongodb";
+import { MovieCollection } from "@/services/collections/MovieCollection";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,10 +6,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const client = await clientPromise;
-    const db = client.db("sample_mflix");
-    const movies = await db.collection("movies").find({}).limit(10).toArray();
-    res.json({ status: 200, data: movies });
+    const collection = await MovieCollection();
+    const movies = await collection.find({}).limit(10).toArray();
+    req.method === "GET" && res.json({ status: 200, data: movies });
   } catch (e) {
     res.status(500).json(e);
   }

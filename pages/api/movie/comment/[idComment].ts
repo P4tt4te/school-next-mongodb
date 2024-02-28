@@ -1,4 +1,4 @@
-import { MovieCollection } from "@/services/collections/MovieCollection";
+import { CommentCollection } from "@/services/collections/CommentCollection";
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -7,19 +7,19 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { idMovie } = req.query;
-    const collection = await MovieCollection();
+    const { idComment } = req.query;
+    const collection = await CommentCollection();
 
-    if (idMovie) {
-      const dbMovie = await collection.findOne({
-        _id: new ObjectId(Array.isArray(idMovie) ? idMovie[0] : idMovie),
+    if (idComment) {
+      const dbComment = await collection.findOne({
+        _id: new ObjectId(Array.isArray(idComment) ? idComment[0] : idComment),
       });
 
       switch (req.method) {
         case "POST":
           break;
         case "GET":
-          res.json({ status: 200, data: { movie: dbMovie } });
+          res.json({ status: 200, data: { movie: dbComment } });
           break;
         case "PUT":
           break;
