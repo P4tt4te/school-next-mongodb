@@ -1,6 +1,20 @@
 import { MovieCollection } from "@/services/collections/MovieCollection";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+/**
+ * The handler function for the /api/movies endpoint.
+ *
+ * @param req - The incoming request object.
+ * @param res - The outgoing response object.
+ *
+ * @swagger
+ * /api/movies:
+ *   get:
+ *     description: Returns the top 10 movies from the database.
+ *     responses:
+ *       200:
+ *         description: The top 10 movies.
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
