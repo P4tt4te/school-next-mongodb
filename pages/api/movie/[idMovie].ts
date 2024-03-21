@@ -12,7 +12,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
  * /api/movie/{movieId}:
  *   get:
  *     summary: Get a movie by ID
- *     parameters: 
+ *     parameters:
  *     - in: path
  *       name: movieId
  *       required: true
@@ -25,10 +25,17 @@ import type { NextApiRequest, NextApiResponse } from "next";
  *       400:
  *         description: The movie dosen't exist or is not valid.
  *   post:
- *      description: Insert a new movie
+ *      summary: Insert a new movie
+ *      parameters:
+ *      - in: path
+ *        name: movieId
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: Numeric ID of the future inserted movie 
  *      requestBody:
  *        required: true
- *        content: 
+ *        content:
  *          application/json:
  *            schema:
  *              type: object
@@ -41,10 +48,17 @@ import type { NextApiRequest, NextApiResponse } from "next";
  *        400:
  *         description: The movie dosen't exist or is not valid.
  *   put:
- *      description: Replace data on an existing movie.
+ *      summary: Replace data on an existing movie.
+ *      parameters:
+ *      - in: path
+ *        name: movieId
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: Numeric ID of the future replaced movie
  *      requestBody:
  *        required: true
- *        content: 
+ *        content:
  *          application/json:
  *            schema:
  *              type: object
@@ -54,11 +68,22 @@ import type { NextApiRequest, NextApiResponse } from "next";
  *      responses:
  *         200:
  *          description: Succeded request.
+ *         400:
+ *          description: The movie dosen't exist or is not valid.
  *   delete:
- *      description: Delete an existing movie.
+ *      summary: Delete an existing movie.
+ *      parameters:
+ *      - in: path
+ *        name: movieId
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: Numeric ID of the future deleted movie
  *      responses:
  *         200:
  *          description: Succeded request.
+ *         400:
+ *          description: The movie dosen't exist or is not valid.
  */
 export default async function handler(
   req: NextApiRequest,
@@ -97,6 +122,19 @@ export default async function handler(
           res.json({ status: 200, data: { movie: dbMovie } });
           break;
         case "PUT":
+          if (dbMovie === null)
+            return res.status(400).json("You can't replace an empty movie.");
+
+          if (!movieObject)
+            return res
+              .status(400)
+              .json("You need to pass a movie to a movieObject body key.");
+
+          const puttingResult = await collection.replaceOne(dbMovie, {
+            ...movieObject,
+            _id: new ObjectId(Array.isArray(idMovie) ? idMovie[0] : idMovie),
+          });
+          res.json({ status: 200, data: { movie: puttingResult } });
           break;
         case "DELETE":
           if (dbMovie === null)
