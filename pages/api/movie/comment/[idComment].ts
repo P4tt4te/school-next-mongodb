@@ -32,7 +32,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
  *        required: true
  *        schema:
  *          type: string
- *        description: Numeric ID of the future inserted comment 
+ *        description: Numeric ID of the future inserted comment
  *      requestBody:
  *        required: true
  *        content:
@@ -91,6 +91,7 @@ export default async function handler(
 ) {
   try {
     const { idComment } = req.query;
+    const commentObject = req.body;
     const collection = await CommentCollection();
 
     if (idComment) {
@@ -100,13 +101,54 @@ export default async function handler(
 
       switch (req.method) {
         case "POST":
+          if (!commentObject)
+            return res
+              .status(400)
+              .json("You need to pass a movie to a commentObject body key.");
+
+          if (dbComment)
+            return res.status(400).json("You can't insert a existing comment.");
+
+          const postingResult = await collection.insertOne({
+            ...commentObject,
+            _id: new ObjectId(
+              Array.isArray(idComment) ? idComment[0] : idComment
+            ),
+          });
+          res.json({ status: 200, data: { comment: postingResult } });
+
           break;
         case "GET":
-          res.json({ status: 200, data: { movie: dbComment } });
+          res.json({ status: 200, data: { comment: dbComment } });
           break;
         case "PUT":
+          if (dbComment === null)
+            return res.status(400).json("You can't replace an empty comment.");
+
+          if (!commentObject)
+            return res
+              .status(400)
+              .json("You need to pass a movie to a commentObject body key.");
+
+          const puttingResult = await collection.replaceOne(dbComment, {
+            ...commentObject,
+            _id: new ObjectId(
+              Array.isArray(idComment) ? idComment[0] : idComment
+            ),
+          });
+          res.json({ status: 200, data: { comment: puttingResult } });
           break;
         case "DELETE":
+          if (dbComment === null)
+            return res.status(400).json("You can't delete an empty comment.");
+
+          const deletedResult = await collection.deleteOne({
+            _id: new ObjectId(
+              Array.isArray(idComment) ? idComment[0] : idComment
+            ),
+          });
+
+          res.json({ status: 200, data: { comment: deletedResult } });
           break;
       }
     }

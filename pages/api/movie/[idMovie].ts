@@ -32,7 +32,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
  *        required: true
  *        schema:
  *          type: string
- *        description: Numeric ID of the future inserted movie 
+ *        description: Numeric ID of the future inserted movie
  *      requestBody:
  *        required: true
  *        content:
