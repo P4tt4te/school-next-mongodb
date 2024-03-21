@@ -10,7 +10,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
  * @swagger
  * /api/comments:
  *   get:
- *     description: Returns the last 10 comments from the database.
+ *     summary: Get the last 10 comments from the collection.
  *     responses:
  *       200:
  *         description: The 10 last comments.

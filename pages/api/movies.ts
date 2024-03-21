@@ -10,7 +10,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
  * @swagger
  * /api/movies:
  *   get:
- *     description: Returns the top 10 movies from the database.
+ *     summary: Get the top 10 movies from the collection.
  *     responses:
  *       200:
  *         description: The top 10 movies.

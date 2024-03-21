@@ -2,6 +2,89 @@ import { CommentCollection } from "@/services/collections/CommentCollection";
 import { ObjectId } from "mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+/**
+ * The handler function for the /api/movies endpoint.
+ *
+ * @param req - The incoming request object.
+ * @param res - The outgoing response object.
+ *
+ * @swagger
+ * /api/movie/comment/{commentId}:
+ *   get:
+ *     summary: Get a comment by ID
+ *     parameters:
+ *     - in: path
+ *       name: commentId
+ *       required: true
+ *       schema:
+ *         type: string
+ *       description: Numeric ID of the comment to get
+ *     responses:
+ *       200:
+ *         description: Succeded request.
+ *       400:
+ *         description: The comment dosen't exist or is not valid.
+ *   post:
+ *      summary: Insert a new comment
+ *      parameters:
+ *      - in: path
+ *        name: commentId
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: Numeric ID of the future inserted comment 
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                _id:
+ *                  type: string
+ *      responses:
+ *        200:
+ *         description: Succeded request.
+ *        400:
+ *         description: The comment dosen't exist or is not valid.
+ *   put:
+ *      summary: Replace data on an existing comment.
+ *      parameters:
+ *      - in: path
+ *        name: commentId
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: Numeric ID of the future replaced comment
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                _id:
+ *                  type: string
+ *      responses:
+ *         200:
+ *          description: Succeded request.
+ *         400:
+ *          description: The comment dosen't exist or is not valid.
+ *   delete:
+ *      summary: Delete an existing comment.
+ *      parameters:
+ *      - in: path
+ *        name: commentId
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: Numeric ID of the future deleted comment
+ *      responses:
+ *         200:
+ *          description: Succeded request.
+ *         400:
+ *          description: The comment dosen't exist or is not valid.
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
